@@ -1,0 +1,154 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import { formatDate } from "../lib/convertDate";
+
+import { newtClient } from "../lib/newt";
+import type { Article } from "../lib/newt";
+
+const { items: articles } = await newtClient.getContents<Article>({
+  appUid: "blog",
+  modelUid: "article",
+  query: {
+    select: ["_sys", "title", "slug", "body", "coverImage", "date"],
+  },
+});
+---
+
+<Layout title="Articles">
+  <main>
+    <section class="mainAbout">
+      <div class="profile-icon">
+        <img src="/profile-icon.png" alt="プロフィールアイコン" />
+      </div>
+      <div class="profile-about">
+        <p class="profile-name">haru</p>
+        <p class="profile-text">
+          will be Frontend Engineer.<br />
+          My Site and Blog Writing.<br />
+          JavaScript Main Learning now.<br />
+          Design and Studying Likes.
+        </p>
+      </div>
+    </section>
+
+    <section class="new-article">
+      <h2 class="heading2">New Articles</h2>
+      <ul>
+        {
+          articles.map((article) => {
+            return (
+              <li class="blog-card">
+                <a href={`/articles/${article.slug}`}>
+                  <p class="post-image">
+                    <img src={`${article.coverImage.src}`} />
+                  </p>
+                  <div class="post-info">
+                    <h3>{article.title}</h3>
+                    <p>{formatDate(article.date)}</p>
+                  </div>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* main {
+    background: url(../../public/bibi21.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+  } */
+  main {
+    margin-inline: 20px;
+  }
+  .mainAbout {
+    text-align: center;
+  }
+  .profile-name {
+    font-size: var(--heading3);
+  }
+  .profile-icon img {
+    width: 200px;
+    border-radius: 10px;
+  }
+  .profile-name,
+  .profile-text {
+    color: var(--text-subColor);
+  }
+  .new-article {
+    margin-top: 50px;
+  }
+  .blog-card {
+    max-width: 960px;
+    /* margin: 0; */
+    list-style-type: none;
+    /* padding: 10px 15px; */
+    padding-inline: 10px;
+    padding-block: 10px;
+    /* padding-block: 15px; */
+    /* background: rgba(255, 255, 255, 0.6); */
+    /* border: 2px solid rgba(0, 0, 0, 0.4); */
+    border-radius: 20px;
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+    box-shadow: 1px 4px 5px rgba(100, 100, 100, 0.5);
+    border-bottom: 1px solid var(--subColor);
+  }
+  .blog-card img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .blog-card p {
+    margin: 0;
+  }
+  .blog-card a {
+    text-decoration: none;
+    color: var(--text-mainColor);
+  }
+  .blog-card + .blog-card {
+    margin-top: 24px;
+  }
+
+  // 余白など調整用のポイント
+  @media (min-width: 600px) {
+    main {
+      margin-inline: 50px;
+    }
+  }
+
+  // タブレット以上
+  @media (min-width: 768px) {
+    main {
+      margin-inline: 50px;
+    }
+  }
+  @media (min-width: 768px) {
+    .mainAbout {
+      max-width: 700px;
+      display: flex;
+      align-items: center;
+      margin-inline: auto;
+    }
+    .profile-about {
+      margin-left: 30px;
+      text-align: left;
+    }
+  }
+  @media (min-width: 768px) {
+    .blog-card a {
+      display: flex;
+      align-items: center;
+    }
+    .blog-card img {
+      max-width: 360px;
+    }
+    .post-info {
+      margin-left: 30px;
+    }
+  }
+</style>

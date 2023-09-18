@@ -1,0 +1,22 @@
+---
+import Navigation from "./Navigation.astro";
+---
+
+<header class="header">
+  <h1><a href="/">Kind Space</a></h1>
+  <p>\ Hello! visiting thanks! /</p>
+  <!-- <Navigation /> -->
+</header>
+
+<style>
+  .header {
+    text-align: center;
+  }
+  .header h1 {
+    font-size: var(--sitetitle-fs);
+  }
+  .header h1 > a {
+    text-decoration: none;
+    color: var(--siteKeyColor); // #213357(accent)
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+import { newtClient } from "../../lib/newt";
+import type { Article } from "../../lib/newt";
+
+export const getStaticPaths = async () => {
+  const { items: articles } = await newtClient.getContents<Article>({
+    appUid: "blog",
+    modelUid: "article",
+    // query: {
+    //   select: ["title", "slug", "body"],
+    // },
+  });
+
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+};
+
+const { article } = Astro.props;
+---
+
+<Layout title="投稿詳細ページ">
+  <main>
+    <section class="post-zone">
+      <h1>{article.title}</h1>
+      <article class="article" set:html={article.body} />
+      <div class="blockquote"><p>blockquote</p></div>
+    </section>
+
+    <section class="author-zone">
+      <div class="author-icon">
+        <img src="/profile-icon.png" alt="プロフィールアイコン" />
+      </div>
+      <div>
+        <p class="author-name">haru</p>
+        <p class="author-text">学ぶことが好きです。あんことムース</p>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    main {
+      margin-inline: 20px;
+    }
+    article.article p {
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    .post-zone,
+    .author-zone {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+      padding-block: 32px;
+      padding-inline: 32px;
+      margin-block: 56px;
+    }
+
+    h1 {
+      font-size: var(--heading1-fs);
+    }
+    h2,
+    h3 {
+      font-weight: bold;
+      border-bottom: 1px solid #dedede;
+      padding-bottom: 5px;
+    }
+    /* .post-zone h1 {
+      font-size: var(--heading1-fs);
+    }
+    main h2 {
+      font-size: var(--heading2-fs);
+    }
+    main h3 {
+      font-size: var(--heading3-fs);
+    } */
+    .article p {
+      line-height: 2;
+    }
+
+    .blockquote {
+      background-color: #f0f0f0;
+      border-left: 5px solid #d1d1d1;
+      padding: 10px 0;
+    }
+    .blockquote p {
+      padding-block: 10px;
+      padding-left: 20px;
+    }
+    .author-icon img {
+      width: 200px;
+      border-radius: 10px;
+    }
+    .author-name,
+    .author-text {
+      color: var(--text-subColor);
+    }
+
+    // 余白など調整用のポイント600～
+    @media (min-width: 600px) {
+      main {
+        margin-inline: 50px;
+      }
+    }
+  </style>
+</Layout>
