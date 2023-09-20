@@ -13,5 +13,8 @@
     "astro": "^2.10.14",
     "dayjs": "^1.11.9",
     "newt-client-js": "^3.2.6"
+  },
+  "devDependencies": {
+    "@astrojs/partytown": "^2.0.0"
   }
 }
