@@ -9,7 +9,7 @@ export const getStaticPaths = async () => {
     appUid: "blog",
     modelUid: "article",
     // query: {
-    //   select: ["title", "slug", "body"],
+    //   select: ["_sys", "title", "slug", "body", "coverImage", "date"],
     // },
   });
 
@@ -22,7 +22,7 @@ export const getStaticPaths = async () => {
 const { article } = Astro.props;
 ---
 
-<Layout title="投稿詳細ページ">
+<Layout title={article.title}>
   <main>
     <section class="post-zone">
       <h1>{article.title}</h1>
